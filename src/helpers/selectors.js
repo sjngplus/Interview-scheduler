@@ -9,6 +9,18 @@ export function getAppointmentsForDay(state, day) {
     appointmentsArray.push(state.appointments[appointmentId]);
   }
   
-  console.log(appointmentsArray);
   return appointmentsArray;
+};
+
+
+export function getInterview(state, interview) {
+  if (!interview) return null;
+  const interviewerId = interview.interviewer
+  const result = {
+    student: interview.student,
+    interviewer: {
+      ...state.interviewers[interviewerId]
+    }
+  };
+  return result;
 };
