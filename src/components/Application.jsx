@@ -24,7 +24,6 @@ export default function Application() {
       />
     );
   });
-  // console.log("State log:", state);
   return (
     <main className="layout">
       <section className="sidebar">
