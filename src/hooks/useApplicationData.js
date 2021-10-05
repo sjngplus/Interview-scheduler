@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { getAppointmentsForDay } from "../helpers/selectors";
 
 export default function useApplicationData() {
   const [state, setState] = useState({
@@ -30,20 +29,26 @@ export default function useApplicationData() {
     });
   }, []);
 
-  const updateSpotforDay = (currentState, selectedDay) => {
+  const updateSpotforDay = (currentState, selectedDay, updatedAppts) => {
     const dayObj = currentState.days.find((element) => element.name === selectedDay);
     const dayObjId = currentState.days.findIndex((element) => element.name === selectedDay);
-    const appointmentsArray = getAppointmentsForDay(currentState, selectedDay);
+
+    let dayAppointmentsId = [];
+    for (const dayObj of state.days) {
+      if (dayObj.name === selectedDay) dayAppointmentsId = [...dayObj.appointments];
+    }
+
+    const appointmentsArray = [];
+    for (const appointmentId of dayAppointmentsId) {
+      appointmentsArray.push(updatedAppts[appointmentId]);
+    }
+
     const numOfSpots = appointmentsArray.filter((element) => element.interview === null).length;
     const newDay = { ...dayObj, spots: numOfSpots };
     const newDays = [...currentState.days];
     newDays[dayObjId] = { ...newDay };
-    setState((prev) => ({ ...prev, days: newDays }));
+    setState((prev) => ({ ...prev, days: newDays, appointments: updatedAppts }));
   };
-
-  useEffect(() => {
-    updateSpotforDay(state, state.day);
-  }, [state.appointments]);
 
   const cancelInterview = (id) => {
     const updatedAppointment = {
@@ -53,7 +58,7 @@ export default function useApplicationData() {
     const updatedAppointments = { ...state.appointments };
     updatedAppointments[id] = { ...updatedAppointment, interview: null };
     return axios.delete(`http://localhost:8001/api/appointments/${id}`).then(() => {
-      setState((prev) => ({ ...prev, appointments: updatedAppointments }));
+      updateSpotforDay(state, state.day, updatedAppointments);
     });
   };
 
@@ -65,10 +70,9 @@ export default function useApplicationData() {
     const appointments = { ...state.appointments };
     appointments[id] = { ...appointment };
     return axios.put(`http://localhost:8001/api/appointments/${id}`, { interview }).then(() => {
-      setState((prev) => ({ ...prev, appointments: appointments }));
+      updateSpotforDay(state, state.day, appointments);
     });
   };
 
-  // console.log(state);
   return { state, setDay, bookInterview, cancelInterview };
 }
