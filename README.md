@@ -1,6 +1,6 @@
 # Interview Scheduler
 
-An interview schduler app built as a project. This was done for learning purposes only, and is not recommended for full scale deployment/usage.
+An interview scheduler app built as a project. This was done for learning purposes only, and is not recommended for full scale deployment/usage.
 
 ## App preview
 
