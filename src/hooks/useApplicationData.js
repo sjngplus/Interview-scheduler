@@ -2,6 +2,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function useApplicationData() {
+  // useEffect(() => {
+  //   const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+  //   webSocket.onopen = (event) => webSocket.send("ping");
+  //   webSocket.onmessage = (event) => console.log(JSON.parse(event.data));
+  // }, []);
+
   const [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -11,11 +17,7 @@ export default function useApplicationData() {
   const setDay = (day) => setState((prev) => ({ ...prev, day: day }));
 
   useEffect(() => {
-    Promise.all([
-      axios.get("http://localhost:8001/api/days/"),
-      axios.get("http://localhost:8001/api/appointments/"),
-      axios.get("http://localhost:8001/api/interviewers/"),
-    ]).then((all) => {
+    Promise.all([axios.get("/api/days/"), axios.get("/api/appointments/"), axios.get("/api/interviewers/")]).then((all) => {
       const [daysResponse, appointmentsResponse, interviewersResponse] = all;
       // console.log(daysResponse.data);
       // console.log(appointmentsResponse.data);
@@ -57,7 +59,7 @@ export default function useApplicationData() {
     };
     const updatedAppointments = { ...state.appointments };
     updatedAppointments[id] = { ...updatedAppointment, interview: null };
-    return axios.delete(`http://localhost:8001/api/appointments/${id}`).then(() => {
+    return axios.delete(`/api/appointments/${id}`).then(() => {
       updateSpotforDay(state, state.day, updatedAppointments);
     });
   };
@@ -69,7 +71,7 @@ export default function useApplicationData() {
     };
     const appointments = { ...state.appointments };
     appointments[id] = { ...appointment };
-    return axios.put(`http://localhost:8001/api/appointments/${id}`, { interview }).then(() => {
+    return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
       updateSpotforDay(state, state.day, appointments);
     });
   };
