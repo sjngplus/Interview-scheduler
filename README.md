@@ -4,7 +4,7 @@ An interview schduler app built as a project. This was done for learning purpose
 
 ## App preview
 
-![App preview gif]("")
+![App preview gif](https://raw.githubusercontent.com/sjngplus/Interview-scheduler/master/docs/App%20preview.gif)
 
 ## Setup
 
@@ -34,6 +34,6 @@ npm run storybook
 - Backend server/api: Node.js
 - Testing tools: Storybooks, Jest, and Cyprus
 
-#### \* Server/api is hosted on Heruku as well. To direct the app to the Heroku hosted server - change the "proxy" value in the package.json to "https://lhl-aug16-scheduler.herokuapp.com/"
+#### \* Server/api is hosted on Heruku as well. To direct the app to the Heroku hosted server - change the "proxy" value in the package.json to "https://lhl-aug16-scheduler.herokuapp.com/":
 
-![package.json screenshot]()
+![package.json screenshot](https://raw.githubusercontent.com/sjngplus/Interview-scheduler/master/docs/Configure%20package.json.png)
